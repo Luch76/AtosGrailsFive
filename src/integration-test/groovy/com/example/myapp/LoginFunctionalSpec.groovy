@@ -27,11 +27,29 @@ class LoginFunctionalSpec extends Specification {
         password = "abcd1234";
 
         when:
-        responseContent = okHttpTestClient.init(baseUrl, username, password);
+        responseContent = okHttpTestClient.initJsonToken(baseUrl, username, password);
 
         then:
         responseContent.responseCode == 200;
         username?.equalsIgnoreCase(responseContent.responseJson."username");
+    }
+
+    void 'test login - secure - jean'() {
+        def responseContent;
+        String username;
+        String password;
+
+        baseUrl = "http://localhost:${serverPort}";
+        username = "jean";
+        password = "abcd1234";
+
+        when:
+        responseContent = okHttpTestClient.initSession(baseUrl, username, password);
+        responseContent = okHttpTestClient.get("/secure");
+
+        then:
+        responseContent.responseCode == 200;
+        username?.equalsIgnoreCase(responseContent.responseJson."principal"."username");
     }
 
     void 'test login - successful - mylene'() {
@@ -44,7 +62,7 @@ class LoginFunctionalSpec extends Specification {
         password = "abcd1234";
 
         when:
-        responseContent = okHttpTestClient.init(baseUrl, username, password);
+        responseContent = okHttpTestClient.initJsonToken(baseUrl, username, password);
 
         then:
         responseContent.responseCode == 200;
@@ -63,7 +81,7 @@ class LoginFunctionalSpec extends Specification {
 
         when:
         try {
-            responseContent = okHttpTestClient.init(baseUrl, username, password);
+            responseContent = okHttpTestClient.initJsonToken(baseUrl, username, password);
         } catch (Exception exception) {
             exceptionOccurred = true;
         }

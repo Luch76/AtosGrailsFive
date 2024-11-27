@@ -4,7 +4,11 @@
 grails.plugin.springsecurity.userLookup.userDomainClassName = 'com.example.myapp.User'
 grails.plugin.springsecurity.userLookup.authorityJoinClassName = 'com.example.myapp.UserRole'
 grails.plugin.springsecurity.authority.className = 'com.example.myapp.Role'
-grails.plugin.springsecurity.controllerAnnotations.staticRules = [
+
+grails.plugin.springsecurity.rejectIfNoRule = true
+grails.plugin.springsecurity.securityConfigType = 'InterceptUrlMap'
+
+grails.plugin.springsecurity.interceptUrlMap = [
 	[pattern: '/',               		access: ['permitAll']],
 	[pattern: '/error',          		access: ['permitAll']],
 	[pattern: '/index',          		access: ['permitAll']],
@@ -17,7 +21,8 @@ grails.plugin.springsecurity.controllerAnnotations.staticRules = [
 	[pattern: '/**/images/**',   		access: ['permitAll']],
 	[pattern: '/**/favicon.ico', 		access: ['permitAll']],
 	[pattern: '/api/login',				access: ['ROLE_ANONYMOUS']],
-	[pattern: '/oauth/access_token',	access: ['ROLE_ANONYMOUS']]
+	[pattern: '/oauth/access_token',	access: ['ROLE_ANONYMOUS']],
+	[pattern: '/secure',				access: ['hasAnyAuthority("ROLE_ADMIN")']],
 ]
 
 grails.plugin.springsecurity.filterChain.chainMap = [
@@ -28,4 +33,3 @@ grails.plugin.springsecurity.filterChain.chainMap = [
 	[pattern: '/**/favicon.ico', filters: 'none'],
 	[pattern: '/**',             filters: 'JOINED_FILTERS']
 ]
-
